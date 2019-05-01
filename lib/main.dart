@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_cancel_addiction/bloc/selectIconBloc.dart';
 
 void main() => runApp(MyApp());
 
@@ -25,13 +26,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
+final _selectIconBloc = SelectIcon();
 
   @override
   Widget build(BuildContext context) {
@@ -40,21 +35,27 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.display1,
-            ),
-          ],
+        child: StreamBuilder(
+          stream: _selectIconBloc.selectIcon,
+          initialData: Icons.sentiment_very_dissatisfied,
+          builder: (BuildContext context, AsyncSnapshot<Object> snapshot){
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    '${DateTime.now()}',
+                  ),
+                  Icon(
+                    snapshot.data
+                    // style: Theme.of(context).textTheme.display1,
+                  ),
+                ],
+              );
+          },
         ),
       ),
       floatingActionButton: IconButton(
-        onPressed: _incrementCounter,
+        onPressed: () => _selectIconBloc.selectIconEventSink.add(Icons.sentiment_satisfied),
         tooltip: 'Increment',
         icon: Icon(Icons.sentiment_satisfied),
       ),

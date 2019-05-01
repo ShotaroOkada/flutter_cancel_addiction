@@ -2,13 +2,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 class SelectIcon {
-  List<IconData> _selectIcons = [];
+  IconData _selectIconData;
 
-  final _selectIconStateController = StreamController<List<IconData>>();
+  final _selectIconDataStateController = StreamController<IconData>();
 
-  StreamSink<List<IconData>> get _inSelectIcon => _selectIconStateController.sink;
+  StreamSink<IconData> get _inSelectIcon => _selectIconDataStateController.sink;
 
-  Stream<List<IconData>> get selectIcon => _selectIconStateController.stream;
+  Stream<IconData> get selectIcon => _selectIconDataStateController.stream;
 
   final _selectIconEventController = StreamController<IconData>();
 
@@ -18,14 +18,15 @@ class SelectIcon {
     _selectIconEventController.stream.listen(_mapEventState);
   }
 
-  void _mapEventState(IconData iconData) {
-    _selectIcons.add(iconData);
+  void _mapEventState(IconData icon) {
+    // _selectIconData.add(icon);
+    _selectIconData = icon;
 
-    _inSelectIcon.add(_selectIcons);
+    _inSelectIcon.add(_selectIconData);
   }
 
   void dispose() {
-    _selectIconStateController.close();
+    _selectIconDataStateController.close();
     _selectIconEventController.close();
   }
 }
